@@ -21,96 +21,103 @@
     <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
-   <TabPane>
-      <tabs>
-         <Tab closable="false" text="Connect">
-            <content>
-                <AnchorPane prefHeight="496.0" prefWidth="600.0">
-                    <Button fx:id="btn_LookForGame" layoutX="241.0" layoutY="360.0" mnemonicParsing="false" onAction="#lookForGame" text="Look For A Game" />
-                    <Label fx:id="lbl_PlayerID" alignment="CENTER" layoutX="152.0" layoutY="320.0" text="Not Connected!  Try Pressing &quot;Connect to Server&quot;">
-                        <padding>
-                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                        </padding>
-                    </Label>
-                    <Button fx:id="btn_ConnectToServer" layoutX="239.0" layoutY="396.0" mnemonicParsing="false" onAction="#connect" text="Connect to Server" />
-                    <ImageView fitHeight="274.0" fitWidth="321.0" layoutX="142.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@titlepage.png" />
-                        </image>
-                    </ImageView>
-                    <ProgressIndicator layoutX="142.0" layoutY="440.0" opacity="0.0" prefHeight="26.0" prefWidth="27.0" />
-                </AnchorPane>
-            </content>
-         </Tab>
-         <Tab closable="false" text="Game">
-           <content>
-             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <GridPane gridLinesVisible="true" layoutX="140.0" layoutY="40.0" prefHeight="320.0" prefWidth="320.0">
-                       <columnConstraints>
-                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                       </columnConstraints>
-                       <rowConstraints>
-                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                       </rowConstraints>
-                        <children>
-                           <Button fx:id="btn_TopLeft" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_BotRight" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_BotMid" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_BotLeft" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.rowIndex="2">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_MidRight" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_Mid" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_MidLeft" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.rowIndex="1">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_TopRight" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                           <Button fx:id="btn_TopMid" mnemonicParsing="false" prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="1">
-                              <font>
-                                 <Font size="48.0" />
-                              </font>
-                           </Button>
-                        </children>
-                     </GridPane>
-                     <Button fx:id="btn_Return" alignment="CENTER" layoutX="255.0" layoutY="391.0" mnemonicParsing="false" prefWidth="90.0" text="Concede" />
-                     <Label fx:id="lbl_Match" layoutX="140.0" layoutY="14.0" text="You vs. Opponent" />
-                  </children>
-               </AnchorPane>
-           </content>
-         </Tab>
-      </tabs>
-   </TabPane>
+    <TabPane>
+        <Tab closable="false" text="Connect">
+            <AnchorPane prefHeight="496.0" prefWidth="600.0">
+                <Button fx:id="btn_LookForGame" layoutX="241.0" layoutY="360.0" mnemonicParsing="false"
+                        onAction="#lookForGame" text="Look For A Game"/>
+                <Label fx:id="lbl_PlayerID" alignment="CENTER" layoutX="152.0" layoutY="320.0"
+                       text="Not Connected!  Try Pressing &quot;Connect to Server&quot;">
+                    <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                    </padding>
+                </Label>
+                <Button fx:id="btn_ConnectToServer" layoutX="239.0" layoutY="396.0" mnemonicParsing="false"
+                        onAction="#connect" text="Connect to Server"/>
+                <ImageView fitHeight="274.0" fitWidth="321.0" layoutX="142.0" layoutY="33.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <Image url="@titlepage.png"/>
+                </ImageView>
+                <ProgressIndicator layoutX="142.0" layoutY="440.0" opacity="0.0" prefHeight="26.0"
+                                   prefWidth="27.0"/>
+            </AnchorPane>
+        </Tab>
+        <Tab closable="false" text="Game">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <GridPane gridLinesVisible="true" layoutX="140.0" layoutY="40.0" prefHeight="320.0"
+                          prefWidth="320.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Button fx:id="btn_TopLeft" mnemonicParsing="false" onAction="#topLeftPressed"
+                            prefHeight="136.0" prefWidth="107.0">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_BotRight" mnemonicParsing="false" onAction="#botRightPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2"
+                            GridPane.rowIndex="2">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_BotMid" mnemonicParsing="false" onAction="#botMidPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="1"
+                            GridPane.rowIndex="2">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_BotLeft" mnemonicParsing="false" onAction="#botLeftPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.rowIndex="2">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_MidRight" mnemonicParsing="false" onAction="#midRightPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2"
+                            GridPane.rowIndex="1">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_Mid" mnemonicParsing="false" onAction="#midPressed" prefHeight="136.0"
+                            prefWidth="107.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_MidLeft" mnemonicParsing="false" onAction="#midLeftPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.rowIndex="1">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_TopRight" mnemonicParsing="false" onAction="#topRightPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="2">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                    <Button fx:id="btn_TopMid" mnemonicParsing="false" onAction="#topMidPressed"
+                            prefHeight="136.0" prefWidth="107.0" GridPane.columnIndex="1">
+                        <font>
+                            <Font size="48.0"/>
+                        </font>
+                    </Button>
+                </GridPane>
+                <Button fx:id="btn_Return" alignment="CENTER" layoutX="255.0" layoutY="391.0"
+                        mnemonicParsing="false" onAction="#returnToLogin" prefWidth="90.0" text="Concede"/>
+                <Label fx:id="lbl_Match" layoutX="140.0" layoutY="14.0" text="You vs. Opponent"/>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
 </GridPane>
