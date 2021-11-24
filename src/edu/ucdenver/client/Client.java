@@ -58,6 +58,7 @@ public class Client {
             this.isConnected = true;
             this.output = new PrintWriter(server.getOutputStream());
             this.input  = new BufferedReader(new InputStreamReader(server.getInputStream()));
+            sendMessage("New client requesting ID");
             this.id = this.input.readLine();
             print(String.format("Success! Client ID: %s", this.id));
         } catch (IOException e) {
