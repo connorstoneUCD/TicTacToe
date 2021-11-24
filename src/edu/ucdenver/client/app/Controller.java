@@ -1,5 +1,6 @@
 package edu.ucdenver.client.app;
 
+import edu.ucdenver.client.Client;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,6 +20,12 @@ public class Controller {
     public Button btn_TopMid;
     public Button btn_Return;
     public Label lbl_Match;
+
+    private Client client;
+
+    public Controller() {
+        client = new Client();
+    }
 
     public void lookForGame(ActionEvent actionEvent) {
     }
