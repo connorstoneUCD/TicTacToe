@@ -28,7 +28,7 @@ public class Controller {
 
     private Client client;
 
-    public Controller() {
+    public void initialize() {
         client = new Client();
 
         if (client.connect()) {
