@@ -41,10 +41,9 @@ public class Controller {
     public void lookForGame(ActionEvent actionEvent) {
         try {
             client.print("Looking for game....");
-            client.sendMessage("client " + client.getId() + " is looking for game");
-
-            if (client.getInput().readLine().contains("starting game between")) {
-                String in = client.getInput().readLine();
+            String in = client.sendMessage("client " + client.getId() + " is looking for game");
+            if (in.contains("starting game between")) {
+                client.print(in);
 
                 if (client.getId().equals(in.split(" ")[3]) || client.getId().equals(in.split(" ")[5])) {
                     if (client.getId().equals(in.split(" ")[3])) client.setOpposingId(in.split(" ")[5]);

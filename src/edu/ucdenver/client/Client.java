@@ -68,10 +68,12 @@ public class Client {
         System.out.println(string);
     }
 
-    public void sendMessage(String message) throws IOException {
+    public String sendMessage(String message) throws IOException {
         this.output.println(message);
         this.output.flush();
-        print(String.format("RESPONSE >> %s", this.input.readLine()));
+        String in = this.input.readLine();
+        print(String.format("RESPONSE >> %s", in));
+        return in;
     }
 
     public boolean connect() {

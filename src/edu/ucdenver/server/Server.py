@@ -42,7 +42,7 @@ def threaded(client_socket):
                     ready_to_start_count = ready_to_start_count + 1
                     while True:
                         if ready_to_start_count == 2:
-                            starting_message = "starting game between" + upcoming_game[0] + " and " + upcoming_game[1]
+                            starting_message = "starting game between " + upcoming_game[0] + " and " + upcoming_game[1]
                             starting_message = starting_message + "\r\n"
                             client_socket.send(starting_message.encode('ascii'))
 

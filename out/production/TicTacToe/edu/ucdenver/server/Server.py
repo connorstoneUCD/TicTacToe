@@ -4,7 +4,7 @@ from uuid import uuid4
 from _thread import *
 import threading
 
-print_lock = threading.Lock()
+player_lock = threading.Lock()
 
 idle_players = []
 looking_for_game = []
@@ -22,9 +22,9 @@ def threaded(client_socket):
 
     unique_id = str(uuid4())
 
-    print_lock.acquire()
+    player_lock.acquire()
     idle_players.append(unique_id)
-    print_lock.release()
+    player_lock.release()
 
     msg_to_send = unique_id + "\r\n"
     client_socket.send(msg_to_send.encode('ascii'))
@@ -42,14 +42,15 @@ def threaded(client_socket):
                     ready_to_start_count = ready_to_start_count + 1
                     while True:
                         if ready_to_start_count == 2:
-                            starting_message = "starting game between" + upcoming_game[0] + " and " + upcoming_game[1]
+                            starting_message = "starting game between " + upcoming_game[0] + " and " + upcoming_game[1]
                             starting_message = starting_message + "\r\n"
                             client_socket.send(starting_message.encode('ascii'))
 
+                            player_lock.acquire()
                             looking_for_game.remove(player_id)
-
-                            upcoming_game.clear()
+                            upcoming_game.remove(player_id)
                             ready_to_start_count = 0
+                            player_lock.release()
 
                             client_socket.close()
 
@@ -66,14 +67,14 @@ def process_client_request(client_socket):
     if "is looking for game" in msg_from_client:
         player_looking_for_game = msg_from_client.split()
 
-        print_lock.acquire()
+        player_lock.acquire()
         idle_players.remove(player_looking_for_game[1])
-        print_lock.release()
+        player_lock.release()
 
-        print_lock.acquire()
+        player_lock.acquire()
         looking_for_game.append(player_looking_for_game[1])
         upcoming_game.append(player_looking_for_game[1])
-        print_lock.release()
+        player_lock.release()
 
     return player_looking_for_game[1]
 
