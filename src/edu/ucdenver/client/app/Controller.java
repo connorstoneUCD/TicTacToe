@@ -123,10 +123,10 @@ public class Controller {
             try {
                 newBoard[index] = client.getSymbol();
                 client.setBoard(newBoard);
-                client.sendMessage(Arrays.toString(newBoard) + " " + client.getOpposingId());
+                String serverMsg = client.sendMessage(Arrays.toString(newBoard) + " " + client.getOpposingId());
 
-                if (client.getInput().readLine().contains(client.getOpposingId() + " won") || client.getInput().readLine().contains(client.getOpposingId() + " concedes")) {
-                    String alertMsg = "Your opponent " + client.getInput().readLine().split(" ")[2];
+                if (serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
+                    String alertMsg = "Your opponent " + serverMsg.split(" ")[2];
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
                     alert.show();
                     goIdle();
