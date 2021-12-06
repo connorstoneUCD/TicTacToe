@@ -43,8 +43,6 @@ public class Controller {
             client.print("Looking for game....");
             String in = client.sendMessage("client " + client.getId() + " is looking for game");
             if (in.contains("starting game between")) {
-                client.print(in);
-
                 if (client.getId().equals(in.split(" ")[3]) || client.getId().equals(in.split(" ")[5])) {
                     if (client.getId().equals(in.split(" ")[3])) client.setOpposingId(in.split(" ")[5]);
                     else client.setOpposingId(in.split(" ")[3]);
@@ -58,6 +56,7 @@ public class Controller {
             }
         } catch (IOException e) {
             client.print("Something went wrong when looking for game.");
+            e.printStackTrace();
         }
     }
 
@@ -113,6 +112,7 @@ public class Controller {
             tabPane.getSelectionModel().select(tab_Connect);
         } catch (IOException e) {
             client.print("Something went wrong while conceding a game with " + client.getOpposingId());
+            e.printStackTrace();
         }
     }
 
@@ -133,6 +133,7 @@ public class Controller {
                 }
             } catch (IOException e) {
                 client.print("Something went wrong when sending a button command.");
+                e.printStackTrace();
             }
         }
     }
@@ -147,6 +148,7 @@ public class Controller {
             tabPane.getSelectionModel().select(tab_Connect);
         } catch (IOException e) {
             client.print("Something went wrong when going idle.");
+            e.printStackTrace();
         }
     }
 }
