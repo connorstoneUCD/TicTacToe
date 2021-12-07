@@ -33,7 +33,7 @@ public class Controller {
 
         if (client.connect()) {
             btn_ConnectToServer.setDisable(true); // only activate the "connect to server" button if the initial connection is not successful
-            lbl_PlayerID.setText(client.getId());
+            lbl_PlayerID.setText("Player ID: " + client.getId());
         }
         tab_Game.setDisable(true);
     }
