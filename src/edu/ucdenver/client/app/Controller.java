@@ -44,8 +44,14 @@ public class Controller {
             String in = client.sendMessage("client " + client.getId() + " is looking for game");
             if (in.contains("starting game between")) {
                 if (client.getId().equals(in.split(" ")[3]) || client.getId().equals(in.split(" ")[5])) {
-                    if (client.getId().equals(in.split(" ")[3])) client.setOpposingId(in.split(" ")[5]);
-                    else client.setOpposingId(in.split(" ")[3]);
+                    if (client.getId().equals(in.split(" ")[3])) {
+                        client.setSymbol('X');
+                        client.setOpposingId(in.split(" ")[5]);
+                    }
+                    else {
+                        client.setSymbol('O');
+                        client.setOpposingId(in.split(" ")[3]);
+                    }
 
                     tab_Game.setDisable(false);
                     tab_Connect.setDisable(true);
