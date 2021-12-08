@@ -74,39 +74,39 @@ public class Controller {
     }
 
     public void topLeftPressed(ActionEvent actionEvent) {
-        this.pressButton(0);
+        if (this.pressButton(0)) btn_TopLeft.setText(String.valueOf(client.getSymbol()));
     }
 
     public void topMidPressed(ActionEvent actionEvent) {
-        this.pressButton(1);
+        if (this.pressButton(1)) btn_TopMid.setText(String.valueOf(client.getSymbol()));
     }
 
     public void topRightPressed(ActionEvent actionEvent) {
-        this.pressButton(2);
+        if (this.pressButton(2)) btn_TopRight.setText(String.valueOf(client.getSymbol()));
     }
 
     public void midLeftPressed(ActionEvent actionEvent) {
-        this.pressButton(3);
+        if (this.pressButton(3)) btn_MidLeft.setText(String.valueOf(client.getSymbol()));
     }
 
     public void midPressed(ActionEvent actionEvent) {
-        this.pressButton(4);
+        if (this.pressButton(4)) btn_Mid.setText(String.valueOf(client.getSymbol()));
     }
 
     public void midRightPressed(ActionEvent actionEvent) {
-        this.pressButton(5);
+        if (this.pressButton(5)) btn_MidRight.setText(String.valueOf(client.getSymbol()));
     }
 
     public void botLeftPressed(ActionEvent actionEvent) {
-        this.pressButton(6);
+        if (this.pressButton(6)) btn_BotLeft.setText(String.valueOf(client.getSymbol()));
     }
 
     public void botMidPressed(ActionEvent actionEvent) {
-        this.pressButton(7);
+        if (this.pressButton(7)) btn_BotMid.setText(String.valueOf(client.getSymbol()));
     }
 
     public void botRightPressed(ActionEvent actionEvent) {
-        this.pressButton(8);
+        if (this.pressButton(8)) btn_BotRight.setText(String.valueOf(client.getSymbol()));
     }
 
     public void returnToLogin(ActionEvent actionEvent) {
@@ -122,15 +122,20 @@ public class Controller {
         }
     }
 
-    private void pressButton(int index) {
+    private boolean pressButton(int index) {
+        try {
+            String currentTurn = client.getInput().readLine();
+            String board = currentTurn.split(" ")[0].replace("([\\[,\\]])", "");
+            client.setBoard(board.toCharArray());
+        } catch (IOException e) {
+            return false;
+        }
         char[] newBoard = client.getBoard();
-
         if (newBoard[index] != ' ') {
             try {
                 newBoard[index] = client.getSymbol();
                 client.setBoard(newBoard);
                 String serverMsg = client.sendMessage(Arrays.toString(newBoard) + " " + client.getOpposingId());
-
                 if (serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
                     String alertMsg = "Your opponent " + serverMsg.split(" ")[2];
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
@@ -142,6 +147,7 @@ public class Controller {
                 e.printStackTrace();
             }
         }
+        return newBoard[index] != ' ';
     }
 
     private void goIdle() {
