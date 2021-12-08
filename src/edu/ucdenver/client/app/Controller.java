@@ -126,7 +126,8 @@ public class Controller {
         try {
             String currentTurn = client.getInput().readLine();
             String board = currentTurn.split(" ")[0].replace("([\\[,\\]])", "");
-            client.setBoard(board.toCharArray());
+            if (currentTurn.split(" ")[1].equals(client.getId())) client.setBoard(board.toCharArray());
+            else return false;
         } catch (IOException e) {
             return false;
         }
