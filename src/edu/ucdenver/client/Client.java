@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class Client {
     private int serverPort;
     private String id, opposingId, serverIP;
-    private boolean isConnected;
+    private boolean isConnected, turn;
     private char symbol;
     private char[] board = new char[9];
     private PrintWriter output;
@@ -41,6 +41,14 @@ public class Client {
         return board;
     }
 
+    public boolean isTurn() {
+        return turn;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
+
     public void setOpposingId(String opposingId) {
         this.opposingId = opposingId;
     }
@@ -57,6 +65,7 @@ public class Client {
         this.serverIP = ip;
         this.serverPort = port;
         this.isConnected  = false;
+        this.turn = false;
         Arrays.fill(this.board, ' ');
     }
 

@@ -56,6 +56,10 @@ public class Controller {
                     tab_Game.setDisable(false);
                     tab_Connect.setDisable(true);
                     tabPane.getSelectionModel().select(tab_Game);
+                    client.setTurn(client.getInput().readLine().split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
+                    if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
+                        client.setTurn(client.getInput().readLine().split(" ")[1].equals(client.getId()));
+                    }
                 } else {
                     client.print(String.format("Received invalid string from server: '%s'", in));
                 }
@@ -74,39 +78,39 @@ public class Controller {
     }
 
     public void topLeftPressed(ActionEvent actionEvent) {
-        if (this.pressButton(0)) btn_TopLeft.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(0);
     }
 
     public void topMidPressed(ActionEvent actionEvent) {
-        if (this.pressButton(1)) btn_TopMid.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(1);
     }
 
     public void topRightPressed(ActionEvent actionEvent) {
-        if (this.pressButton(2)) btn_TopRight.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(2);
     }
 
     public void midLeftPressed(ActionEvent actionEvent) {
-        if (this.pressButton(3)) btn_MidLeft.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(3);
     }
 
     public void midPressed(ActionEvent actionEvent) {
-        if (this.pressButton(4)) btn_Mid.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(4);
     }
 
     public void midRightPressed(ActionEvent actionEvent) {
-        if (this.pressButton(5)) btn_MidRight.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(5);
     }
 
     public void botLeftPressed(ActionEvent actionEvent) {
-        if (this.pressButton(6)) btn_BotLeft.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(6);
     }
 
     public void botMidPressed(ActionEvent actionEvent) {
-        if (this.pressButton(7)) btn_BotMid.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(7);
     }
 
     public void botRightPressed(ActionEvent actionEvent) {
-        if (this.pressButton(8)) btn_BotRight.setText(String.valueOf(client.getSymbol()));
+        this.pressButton(8);
     }
 
     public void returnToLogin(ActionEvent actionEvent) {
@@ -122,33 +126,72 @@ public class Controller {
         }
     }
 
-    private boolean pressButton(int index) {
-        try {
-            String currentTurn = client.getInput().readLine();
-            String board = currentTurn.split(" ")[0].replace("([\\[,\\]])", "");
-            if (currentTurn.split(" ")[1].equals(client.getId())) client.setBoard(board.toCharArray());
-            else return false;
-        } catch (IOException e) {
-            return false;
-        }
+    private void pressButton(int index) {
+        if (!client.isTurn()) return;
+
         char[] newBoard = client.getBoard();
         if (newBoard[index] != ' ') {
             try {
                 newBoard[index] = client.getSymbol();
                 client.setBoard(newBoard);
                 String serverMsg = client.sendMessage(Arrays.toString(newBoard) + " " + client.getOpposingId());
+                client.setTurn(false);
+
+                // if the message we get back from the server says we won, do the process for going idle
+                if (serverMsg.contains(client.getId() + " won")) {
+                    String alertMsg = "You won!";
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
+                    alert.show();
+                    goIdle();
+                } else { // otherwise, we know it is a board state so update our board
+                    switch (index) {
+                        case 0: btn_TopLeft.setText(String.valueOf(client.getSymbol())); break;
+                        case 1: btn_TopMid.setText(String.valueOf(client.getSymbol())); break;
+                        case 2: btn_TopRight.setText(String.valueOf(client.getSymbol())); break;
+                        case 3: btn_MidLeft.setText(String.valueOf(client.getSymbol())); break;
+                        case 4: btn_Mid.setText(String.valueOf(client.getSymbol())); break;
+                        case 5: btn_MidRight.setText(String.valueOf(client.getSymbol())); break;
+                        case 6: btn_BotLeft.setText(String.valueOf(client.getSymbol())); break;
+                        case 7: btn_BotMid.setText(String.valueOf(client.getSymbol())); break;
+                        case 8: btn_BotRight.setText(String.valueOf(client.getSymbol())); break;
+                    }
+                }
+
+                // then, we wait for the message coming from the other client and do the same as above but check if they won or conceded
+                serverMsg = client.getInput().readLine();
                 if (serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
                     String alertMsg = "Your opponent " + serverMsg.split(" ")[2];
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
                     alert.show();
                     goIdle();
+                } else { // if they didn't win or concede, we need to update our board again with their move
+                    int opposingPlay = -1;
+                    char opposingSymbol = client.getSymbol() == 'X' ? 'O' : 'X';
+                    char[] inBoard = serverMsg.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray();
+                    for (int i = 0; i < client.getBoard().length; i++) {
+                        if (client.getBoard()[i] != inBoard[i]) {
+                            opposingPlay = i; // get the move they made
+                            break;
+                        }
+                    }
+                    switch (opposingPlay) { // update the board according to it
+                        case 0: btn_TopLeft.setText(String.valueOf(opposingSymbol)); break;
+                        case 1: btn_TopMid.setText(String.valueOf(opposingSymbol)); break;
+                        case 2: btn_TopRight.setText(String.valueOf(opposingSymbol)); break;
+                        case 3: btn_MidLeft.setText(String.valueOf(opposingSymbol)); break;
+                        case 4: btn_Mid.setText(String.valueOf(opposingSymbol)); break;
+                        case 5: btn_MidRight.setText(String.valueOf(opposingSymbol)); break;
+                        case 6: btn_BotLeft.setText(String.valueOf(opposingSymbol)); break;
+                        case 7: btn_BotMid.setText(String.valueOf(opposingSymbol)); break;
+                        case 8: btn_BotRight.setText(String.valueOf(opposingSymbol)); break;
+                    }
+                    client.setTurn(true); // say it's our turn
                 }
             } catch (IOException e) {
                 client.print("Something went wrong when sending a button command.");
                 e.printStackTrace();
             }
         }
-        return newBoard[index] != ' ';
     }
 
     private void goIdle() {
