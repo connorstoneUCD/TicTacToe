@@ -58,7 +58,18 @@ public class Controller {
                     tabPane.getSelectionModel().select(tab_Game);
                     client.setTurn(client.getInput().readLine().split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
                     if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
-                        client.setTurn(client.getInput().readLine().split(" ")[1].equals(client.getId()));
+                        in = client.getInput().readLine();
+                        client.setTurn(in.split(" ")[1].equals(client.getId()));
+                        client.setBoard(in.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray());
+                        int opposingPlay = 0;
+                        char opposingSymbol = client.getSymbol() == 'X' ? 'O' : 'X';
+                        for (int i = 0; i < client.getBoard().length; i++) {
+                            if (client.getBoard()[i] != ' ') {
+                                opposingPlay = i;
+                                break;
+                            }
+                        }
+                        updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
                     }
                 } else {
                     client.print(String.format("Received invalid string from server: '%s'", in));
@@ -67,6 +78,20 @@ public class Controller {
         } catch (IOException e) {
             client.print("Something went wrong when looking for game.");
             e.printStackTrace();
+        }
+    }
+
+    private void updateGUIwithOpposingPlay(int opposingPlay, char opposingSymbol) {
+        switch (opposingPlay) {
+            case 0: btn_TopLeft.setText(String.valueOf(opposingSymbol)); break;
+            case 1: btn_TopMid.setText(String.valueOf(opposingSymbol)); break;
+            case 2: btn_TopRight.setText(String.valueOf(opposingSymbol)); break;
+            case 3: btn_MidLeft.setText(String.valueOf(opposingSymbol)); break;
+            case 4: btn_Mid.setText(String.valueOf(opposingSymbol)); break;
+            case 5: btn_MidRight.setText(String.valueOf(opposingSymbol)); break;
+            case 6: btn_BotLeft.setText(String.valueOf(opposingSymbol)); break;
+            case 7: btn_BotMid.setText(String.valueOf(opposingSymbol)); break;
+            case 8: btn_BotRight.setText(String.valueOf(opposingSymbol)); break;
         }
     }
 
@@ -174,17 +199,7 @@ public class Controller {
                             break;
                         }
                     }
-                    switch (opposingPlay) { // update the board according to it
-                        case 0: btn_TopLeft.setText(String.valueOf(opposingSymbol)); break;
-                        case 1: btn_TopMid.setText(String.valueOf(opposingSymbol)); break;
-                        case 2: btn_TopRight.setText(String.valueOf(opposingSymbol)); break;
-                        case 3: btn_MidLeft.setText(String.valueOf(opposingSymbol)); break;
-                        case 4: btn_Mid.setText(String.valueOf(opposingSymbol)); break;
-                        case 5: btn_MidRight.setText(String.valueOf(opposingSymbol)); break;
-                        case 6: btn_BotLeft.setText(String.valueOf(opposingSymbol)); break;
-                        case 7: btn_BotMid.setText(String.valueOf(opposingSymbol)); break;
-                        case 8: btn_BotRight.setText(String.valueOf(opposingSymbol)); break;
-                    }
+                    updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
                     client.setTurn(true); // say it's our turn
                 }
             } catch (IOException e) {
