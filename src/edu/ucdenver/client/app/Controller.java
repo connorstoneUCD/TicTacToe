@@ -59,10 +59,10 @@ public class Controller {
                     in = client.sendMessage("client " + client.getId() + " has entered the board");
                     client.setTurn(in.split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
                     if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
-                        // in = client.getInput().readLine();
+                        in = client.getInput().readLine();
                         client.setTurn(in.split(" ")[1].equals(client.getId()));
                         client.setBoard(in.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray());
-                        int opposingPlay = 0;
+                        int opposingPlay = -1;
                         char opposingSymbol = client.getSymbol() == 'X' ? 'O' : 'X';
                         for (int i = 0; i < client.getBoard().length; i++) {
                             if (client.getBoard()[i] != ' ') {
@@ -70,7 +70,7 @@ public class Controller {
                                 break;
                             }
                         }
-                        updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
+                        if (opposingPlay != -1) updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
                     }
                 } else {
                     client.print(String.format("Received invalid string from server: '%s'", in));
