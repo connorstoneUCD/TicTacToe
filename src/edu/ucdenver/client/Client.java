@@ -78,6 +78,7 @@ public class Client {
     }
 
     public String sendMessage(String message) throws IOException {
+        print(String.format("SENT >> %s", message));
         this.output.println(message);
         this.output.flush();
         String in = this.input.readLine();

@@ -1,5 +1,6 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from uuid import uuid4
+import json
 
 from _thread import *
 import threading
@@ -12,9 +13,13 @@ looking_for_game = []
 upcoming_game = []
 ready_to_start_count = 0
 
+boardList = ["-"] * 8
+currentTurn = 0
+gameStatus = True
+
 # thread function
 def threaded(client_socket):
-    global idle_players, looking_for_game, ready_to_start_count, upcoming_game
+    global idle_players, looking_for_game, ready_to_start_count, upcoming_game, boardList, gameStatus
 
     client_socket.recv(1024)
     msg = "Connected to Tic-Tac-Toe Server\r\n"
@@ -41,18 +46,32 @@ def threaded(client_socket):
                 if upcoming_game[0] == player_id or upcoming_game[1] == player_id:
                     ready_to_start_count = ready_to_start_count + 1
                     while True:
+
                         if ready_to_start_count == 2:
                             starting_message = "starting game between " + upcoming_game[0] + " and " + upcoming_game[1]
                             starting_message = starting_message + "\r\n"
                             client_socket.send(starting_message.encode('ascii'))
 
+                            # This will
                             player_lock.acquire()
                             looking_for_game.remove(player_id)
-                            upcoming_game.remove(player_id)
                             ready_to_start_count = 0
                             player_lock.release()
+                            gameStatus = True
 
-                            client_socket.close()
+                            # Read in that a client has entered the playing field / board
+                            msg_from_client = client_socket.recv(1024).decode()
+                            print('RECEIVED >> ' + msg_from_client)
+
+                            # First time initializing the board and deciding who goes first
+                            boardStr = ''.join(boardList)
+                            board = boardStr + " " + upcoming_game[currentTurn] + " turn" + "\r\n"
+                            client_socket.send(board.encode('ascii'))
+
+                            # This will run until someone wins
+                            while gameStatus == True:
+                                pass
+
 
 
     else:

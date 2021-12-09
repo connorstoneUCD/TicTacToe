@@ -56,7 +56,7 @@ public class Controller {
                     tab_Game.setDisable(false);
                     tab_Connect.setDisable(true);
                     tabPane.getSelectionModel().select(tab_Game);
-                    in = client.getInput().readLine();
+                    in = client.sendMessage("client " + client.getId() + " has entered the board");
                     client.setTurn(in.split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
                     if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
                         in = client.getInput().readLine();
