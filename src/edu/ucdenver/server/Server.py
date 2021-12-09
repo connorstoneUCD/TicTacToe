@@ -17,6 +17,7 @@ boardList = ["-"] * 8
 currentTurn = 0
 gameStatus = True
 
+
 # thread function
 def threaded(client_socket):
     global idle_players, looking_for_game, ready_to_start_count, upcoming_game, boardList, gameStatus
@@ -68,9 +69,21 @@ def threaded(client_socket):
                             board = boardStr + " " + upcoming_game[currentTurn] + " turn" + "\r\n"
                             client_socket.send(board.encode('ascii'))
 
+
                             # This will run until someone wins
                             while gameStatus == True:
-                                pass
+                                client_move = client_socket.recv(1024).decode()
+                                if client_move:
+                                    print(client_move)
+
+                                    playerSymbol = client_move.split(" ")[0]
+                                    Index = client_move.split(" ")[1]
+                                    player_id_return = client_move.split(" ")[2]
+                                    player_id_return = player_id_return.replace("\r\n", "")
+                                    boardList[int(Index)] = str(playerSymbol)
+
+                                    continue_message = "Player " + player_id_return + " has made a move" + "\r\n"
+                                    client_socket.send(continue_message.encode('ascii'))
 
 
 

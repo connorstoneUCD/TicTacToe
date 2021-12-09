@@ -59,7 +59,7 @@ public class Controller {
                     in = client.sendMessage("client " + client.getId() + " has entered the board");
                     client.setTurn(in.split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
                     if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
-                        in = client.getInput().readLine();
+                        // in = client.getInput().readLine();
                         client.setTurn(in.split(" ")[1].equals(client.getId()));
                         client.setBoard(in.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray());
                         int opposingPlay = 0;
@@ -153,19 +153,27 @@ public class Controller {
     }
 
     private void pressButton(int index) {
-        if (!client.isTurn()) return;
+        if (!client.isTurn()) {
+            client.print("Not your turn");
+            return;
+        }
 
         char[] newBoard = client.getBoard();
-        if (newBoard[index] != '-') {
+        client.print("SENT REQUEST");
+
+        if (newBoard[index] == '-') {
+            client.print(String.valueOf(newBoard[index]));
             try {
+
                 newBoard[index] = client.getSymbol();
+                client.print(String.valueOf(newBoard[index]));
                 client.setBoard(newBoard);
-                String serverMsg = client.sendMessage(Arrays.toString(newBoard) + " " + client.getOpposingId());
+                String serverMsg = client.sendMessage(client.getSymbol() + " " + index + " " + client.getOpposingId());
                 client.setTurn(false);
 
                 // if the message we get back from the server says we won, do the process for going idle
-                if (serverMsg.contains(client.getId() + " won")) {
-                    String alertMsg = "You won!";
+                if (serverMsg.contains(client.getId() + " won") || serverMsg.contains("Nobody won")) {
+                    String alertMsg = serverMsg.contains("Nobody won") ? "Nobody won" : "You won!";
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
                     alert.show();
                     goIdle();
@@ -185,8 +193,8 @@ public class Controller {
 
                 // then, we wait for the message coming from the other client and do the same as above but check if they won or conceded
                 serverMsg = client.getInput().readLine();
-                if (serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
-                    String alertMsg = "Your opponent " + serverMsg.split(" ")[2];
+                if (serverMsg.contains("Nobody won") || serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
+                    String alertMsg = serverMsg.contains("Nobody won") ? "Nobody won" : "Your opponent " + serverMsg.split(" ")[2];
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
                     alert.show();
                     goIdle();
