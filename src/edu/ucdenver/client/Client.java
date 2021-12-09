@@ -66,7 +66,7 @@ public class Client {
         this.serverPort = port;
         this.isConnected  = false;
         this.turn = false;
-        Arrays.fill(this.board, ' ');
+        Arrays.fill(this.board, '-');
     }
 
     public Client() {

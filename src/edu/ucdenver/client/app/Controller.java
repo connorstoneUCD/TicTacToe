@@ -56,7 +56,8 @@ public class Controller {
                     tab_Game.setDisable(false);
                     tab_Connect.setDisable(true);
                     tabPane.getSelectionModel().select(tab_Game);
-                    client.setTurn(client.getInput().readLine().split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
+                    in = client.getInput().readLine();
+                    client.setTurn(in.split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
                     if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
                         in = client.getInput().readLine();
                         client.setTurn(in.split(" ")[1].equals(client.getId()));
@@ -155,7 +156,7 @@ public class Controller {
         if (!client.isTurn()) return;
 
         char[] newBoard = client.getBoard();
-        if (newBoard[index] != ' ') {
+        if (newBoard[index] != '-') {
             try {
                 newBoard[index] = client.getSymbol();
                 client.setBoard(newBoard);
