@@ -11,7 +11,7 @@ public class Client {
     private int serverPort;
     private String id, opposingId, serverIP;
     private boolean isConnected, turn;
-    private char symbol;
+    private String symbol;
     private char[] board = new char[9];
     private PrintWriter output;
     private BufferedReader input;
@@ -29,7 +29,7 @@ public class Client {
         return isConnected;
     }
 
-    public char getSymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
@@ -57,7 +57,7 @@ public class Client {
         this.board = board;
     }
 
-    public void setSymbol(char symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 

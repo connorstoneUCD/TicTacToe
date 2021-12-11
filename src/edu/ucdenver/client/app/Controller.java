@@ -45,32 +45,27 @@ public class Controller {
             if (in.contains("starting game between")) {
                 if (client.getId().equals(in.split(" ")[3]) || client.getId().equals(in.split(" ")[5])) {
                     if (client.getId().equals(in.split(" ")[3])) {
-                        client.setSymbol('X');
+                        client.setSymbol("X");
                         client.setOpposingId(in.split(" ")[5]);
                     }
                     else {
-                        client.setSymbol('O');
+                        client.setSymbol("O");
                         client.setOpposingId(in.split(" ")[3]);
                     }
 
                     tab_Game.setDisable(false);
                     tab_Connect.setDisable(true);
                     tabPane.getSelectionModel().select(tab_Game);
-                    in = client.sendMessage("client " + client.getId() + " has entered the board");
-                    client.setTurn(in.split(" ")[1].equals(client.getId())); // get the initial board from the server and set if it is this client's turn
-                    if (!client.isTurn()) { // if it is not our turn, we wait until it is and then allow for pressing buttons
-                        in = client.getInput().readLine();
-                        client.setTurn(in.split(" ")[1].equals(client.getId()));
-                        client.setBoard(in.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray());
+                    if (client.sendMessage("client " + client.getId() + " has entered the board").contains(client.getId())) {
                         int opposingPlay = -1;
-                        char opposingSymbol = client.getSymbol() == 'X' ? 'O' : 'X';
-                        for (int i = 0; i < client.getBoard().length; i++) {
-                            if (client.getBoard()[i] != ' ') {
-                                opposingPlay = i;
-                                break;
-                            }
+                        char opposingSymbol = client.getSymbol().equals("X") ? 'O' : 'X';
+                        int i = -1;
+                        in = client.getInput().readLine();
+                        for (char letter : in.toCharArray()) {
+                            i++;
+                            if (letter == opposingSymbol) break;
                         }
-                        if (opposingPlay != -1) updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
+                        updateGUIwithOpposingPlay(i, String.valueOf(opposingSymbol));
                     }
                 } else {
                     client.print(String.format("Received invalid string from server: '%s'", in));
@@ -82,17 +77,17 @@ public class Controller {
         }
     }
 
-    private void updateGUIwithOpposingPlay(int opposingPlay, char opposingSymbol) {
+    private void updateGUIwithOpposingPlay(int opposingPlay, String opposingSymbol) {
         switch (opposingPlay) {
-            case 0: btn_TopLeft.setText(String.valueOf(opposingSymbol)); break;
-            case 1: btn_TopMid.setText(String.valueOf(opposingSymbol)); break;
-            case 2: btn_TopRight.setText(String.valueOf(opposingSymbol)); break;
-            case 3: btn_MidLeft.setText(String.valueOf(opposingSymbol)); break;
-            case 4: btn_Mid.setText(String.valueOf(opposingSymbol)); break;
-            case 5: btn_MidRight.setText(String.valueOf(opposingSymbol)); break;
-            case 6: btn_BotLeft.setText(String.valueOf(opposingSymbol)); break;
-            case 7: btn_BotMid.setText(String.valueOf(opposingSymbol)); break;
-            case 8: btn_BotRight.setText(String.valueOf(opposingSymbol)); break;
+            case 0: btn_TopLeft.setText(opposingSymbol); break;
+            case 1: btn_TopMid.setText(opposingSymbol); break;
+            case 2: btn_TopRight.setText(opposingSymbol); break;
+            case 3: btn_MidLeft.setText(opposingSymbol); break;
+            case 4: btn_Mid.setText(opposingSymbol); break;
+            case 5: btn_MidRight.setText(opposingSymbol); break;
+            case 6: btn_BotLeft.setText(opposingSymbol); break;
+            case 7: btn_BotMid.setText(opposingSymbol); break;
+            case 8: btn_BotRight.setText(opposingSymbol); break;
         }
     }
 
@@ -104,6 +99,7 @@ public class Controller {
     }
 
     public void topLeftPressed(ActionEvent actionEvent) {
+        btn_TopLeft.setText("X");
         this.pressButton(0);
     }
 
@@ -141,86 +137,123 @@ public class Controller {
 
     public void returnToLogin(ActionEvent actionEvent) {
         try {
-            client.sendMessage(String.format("%s: %s %s concedes", Arrays.toString(client.getBoard()), client.getOpposingId(), client.getId()));
-            client.setOpposingId("");
-            tab_Game.setDisable(true);
-            tab_Connect.setDisable(false);
-            tabPane.getSelectionModel().select(tab_Connect);
+            if (btn_Return.getText().equals("Concede")) {
+                client.print("Conceding");
+                client.sendMessage(String.format("%s concedes", client.getId()));
+                client.print("Going idle....");
+                client.setOpposingId("");
+                tab_Game.setDisable(true);
+                tab_Connect.setDisable(false);
+                tabPane.getSelectionModel().select(tab_Connect);
+            } else {
+                goIdle(true);
+            }
         } catch (IOException e) {
             client.print("Something went wrong while conceding a game with " + client.getOpposingId());
             e.printStackTrace();
         }
     }
 
+    private boolean checkForWinner(String message, boolean self) {
+        if (self) return message.contains(client.getId() + " won");
+        else return message.contains(client.getOpposingId() + " won");
+    }
+
+    private void popUpWinner(boolean self) {
+        String alertMsg = self ? "You won!" : "Your opponent won...";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
+        alert.show();
+    }
+
+    private void popUpConceded() {
+        String alertMsg = "Your opponent conceded!";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
+        alert.show();
+    }
+
+    private boolean checkForTie(String message) {
+        return message.contains("nobody");
+    }
+
+    private void popUpTie() {
+        String alertMsg = "It's a tie!";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
+        alert.show();
+    }
+
     private void pressButton(int index) {
-        if (!client.isTurn()) {
-            client.print("Not your turn");
-            return;
-        }
-
-        char[] newBoard = client.getBoard();
-        client.print("SENT REQUEST");
-
-        if (newBoard[index] == '-') {
-            client.print(String.valueOf(newBoard[index]));
+        if (client.getBoard()[index] == '-'){
             try {
-
-                newBoard[index] = client.getSymbol();
-                client.print(String.valueOf(newBoard[index]));
-                client.setBoard(newBoard);
-                String serverMsg = client.sendMessage(client.getSymbol() + " " + index + " " + client.getOpposingId());
-                client.setTurn(false);
-
-                // if the message we get back from the server says we won, do the process for going idle
-                if (serverMsg.contains(client.getId() + " won") || serverMsg.contains("Nobody won")) {
-                    String alertMsg = serverMsg.contains("Nobody won") ? "Nobody won" : "You won!";
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
-                    alert.show();
-                    goIdle();
-                } else { // otherwise, we know it is a board state so update our board
+                String in = client.sendMessage(client.getSymbol() + " " + index + " " + client.getOpposingId());
+                if (in.contains(client.getId())) {
                     switch (index) {
-                        case 0: btn_TopLeft.setText(String.valueOf(client.getSymbol())); break;
-                        case 1: btn_TopMid.setText(String.valueOf(client.getSymbol())); break;
-                        case 2: btn_TopRight.setText(String.valueOf(client.getSymbol())); break;
-                        case 3: btn_MidLeft.setText(String.valueOf(client.getSymbol())); break;
-                        case 4: btn_Mid.setText(String.valueOf(client.getSymbol())); break;
-                        case 5: btn_MidRight.setText(String.valueOf(client.getSymbol())); break;
-                        case 6: btn_BotLeft.setText(String.valueOf(client.getSymbol())); break;
-                        case 7: btn_BotMid.setText(String.valueOf(client.getSymbol())); break;
-                        case 8: btn_BotRight.setText(String.valueOf(client.getSymbol())); break;
+                        case 0: btn_TopLeft.setText(client.getSymbol()); break;
+                        case 1: btn_TopMid.setText(client.getSymbol()); break;
+                        case 2: btn_TopRight.setText(client.getSymbol()); break;
+                        case 3: btn_MidLeft.setText(client.getSymbol()); break;
+                        case 4: btn_Mid.setText(client.getSymbol()); break;
+                        case 5: btn_MidRight.setText(client.getSymbol()); break;
+                        case 6: btn_BotLeft.setText(client.getSymbol()); break;
+                        case 7: btn_BotMid.setText(client.getSymbol()); break;
+                        case 8: btn_BotRight.setText(client.getSymbol()); break;
                     }
-                }
 
-                // then, we wait for the message coming from the other client and do the same as above but check if they won or conceded
-                serverMsg = client.getInput().readLine();
-                if (serverMsg.contains("Nobody won") || serverMsg.contains(client.getOpposingId() + " won") || serverMsg.contains(client.getOpposingId() + " concedes")) {
-                    String alertMsg = serverMsg.contains("Nobody won") ? "Nobody won" : "Your opponent " + serverMsg.split(" ")[2];
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION, alertMsg);
-                    alert.show();
-                    goIdle();
-                } else { // if they didn't win or concede, we need to update our board again with their move
-                    int opposingPlay = -1;
-                    char opposingSymbol = client.getSymbol() == 'X' ? 'O' : 'X';
-                    char[] inBoard = serverMsg.split(" ")[0].replaceAll("([\\[,\\]])", "").toCharArray();
-                    for (int i = 0; i < client.getBoard().length; i++) {
-                        if (client.getBoard()[i] != inBoard[i]) {
-                            opposingPlay = i; // get the move they made
-                            break;
-                        }
+                    if (checkForWinner(in, true)) {
+                        client.print("You won!");
+                        popUpWinner(true);
+                        convertConcedeToReturn();
+                        return;
                     }
-                    updateGUIwithOpposingPlay(opposingPlay, opposingSymbol);
-                    client.setTurn(true); // say it's our turn
+
+                    if (checkForTie(in)) {
+                        client.print("It's a tie!");
+                        popUpTie();
+                        convertConcedeToReturn();
+                        return;
+                    }
+
+                    in = client.getInput().readLine();
+
+                    if (in.contains("concedes")) {
+                        client.print("Your opponent conceded!");
+                        popUpConceded();
+                        convertConcedeToReturn();
+                    }
+
+                    int opposingPlay = -1;
+                    char opposingSymbol = client.getSymbol().equals("X") ? 'O' : 'X';
+                    int i = -1;
+                    for (char letter : in.toCharArray()) {
+                        i++;
+                        if (letter == opposingSymbol) break;
+                    }
+                    updateGUIwithOpposingPlay(i, String.valueOf(opposingSymbol));
+
+                    if (checkForWinner(in, false)) {
+                        client.print("Your opponent won!");
+                        popUpWinner(false);
+                        convertConcedeToReturn();
+                    }
+
+                    if (checkForTie(in)) {
+                        client.print("It's a tie!");
+                        popUpTie();
+                        convertConcedeToReturn();
+                    }
                 }
             } catch (IOException e) {
-                client.print("Something went wrong when sending a button command.");
                 e.printStackTrace();
             }
         }
     }
 
-    private void goIdle() {
+    private void convertConcedeToReturn() {
+        btn_Return.setText("Return to Title");
+    }
+
+    private void goIdle(boolean sendMessage) {
         try {
-            client.sendMessage(client.getId() + " going idle");
+            if (sendMessage) client.sendMessage(client.getId() + " going idle");
             client.print("Going idle....");
             client.setOpposingId("");
             tab_Game.setDisable(true);
