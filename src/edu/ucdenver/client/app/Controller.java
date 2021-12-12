@@ -99,7 +99,6 @@ public class Controller {
     }
 
     public void topLeftPressed(ActionEvent actionEvent) {
-        btn_TopLeft.setText("X");
         this.pressButton(0);
     }
 
