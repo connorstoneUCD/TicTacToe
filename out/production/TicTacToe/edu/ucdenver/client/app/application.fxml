@@ -53,47 +53,47 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                    <Button fx:id="btn_TopLeft" mnemonicParsing="false" onAction="#topLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares">
+                    <Button fx:id="btn_TopLeft" mnemonicParsing="false" onAction="#topLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_BotRight" mnemonicParsing="false" onAction="#botRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <Button fx:id="btn_BotRight" mnemonicParsing="false" onAction="#botRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_BotMid" mnemonicParsing="false" onAction="#botMidPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Button fx:id="btn_BotMid" mnemonicParsing="false" onAction="#botMidPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_BotLeft" mnemonicParsing="false" onAction="#botLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.rowIndex="2">
+                    <Button fx:id="btn_BotLeft" mnemonicParsing="false" onAction="#botLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.rowIndex="2">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_MidRight" mnemonicParsing="false" onAction="#midRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Button fx:id="btn_MidRight" mnemonicParsing="false" onAction="#midRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_MidLeft" mnemonicParsing="false" onAction="#midLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.rowIndex="1">
+                    <Button fx:id="btn_MidLeft" mnemonicParsing="false" onAction="#midLeftPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.rowIndex="1">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_TopMid" mnemonicParsing="false" onAction="#topMidPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="1">
+                    <Button fx:id="btn_TopMid" mnemonicParsing="false" onAction="#topMidPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="1">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_TopRight" mnemonicParsing="false" onAction="#topRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="2">
+                    <Button fx:id="btn_TopRight" mnemonicParsing="false" onAction="#topRightPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="2">
                         <font>
                             <Font size="48.0" />
                         </font>
                     </Button>
-                    <Button fx:id="btn_Mid" mnemonicParsing="false" onAction="#midPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Button fx:id="btn_Mid" mnemonicParsing="false" onAction="#midPressed" prefHeight="136.0" prefWidth="107.0" styleClass="gameSquares" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <font>
                             <Font size="48.0" />
                         </font>

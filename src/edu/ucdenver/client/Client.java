@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class Client {
     private int serverPort;
     private String id, opposingId, serverIP;
-    private boolean isConnected;
-    private char symbol;
+    private boolean isConnected, turn;
+    private String symbol;
     private char[] board = new char[9];
     private PrintWriter output;
     private BufferedReader input;
@@ -29,7 +29,7 @@ public class Client {
         return isConnected;
     }
 
-    public char getSymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
@@ -41,6 +41,14 @@ public class Client {
         return board;
     }
 
+    public boolean isTurn() {
+        return turn;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
+
     public void setOpposingId(String opposingId) {
         this.opposingId = opposingId;
     }
@@ -49,7 +57,7 @@ public class Client {
         this.board = board;
     }
 
-    public void setSymbol(char symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
@@ -57,7 +65,8 @@ public class Client {
         this.serverIP = ip;
         this.serverPort = port;
         this.isConnected  = false;
-        Arrays.fill(this.board, ' ');
+        this.turn = false;
+        Arrays.fill(this.board, '-');
     }
 
     public Client() {
@@ -69,6 +78,7 @@ public class Client {
     }
 
     public String sendMessage(String message) throws IOException {
+        print(String.format("SENT >> %s", message));
         this.output.println(message);
         this.output.flush();
         String in = this.input.readLine();
